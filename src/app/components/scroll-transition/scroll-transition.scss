@@ -1,0 +1,96 @@
+// scroll-transition.scss
+
+:host {
+  display: block;
+}
+
+.scroll-section {
+  height: 600vh;       // tall enough for all 5 phases
+  background: #000;
+}
+
+.sticky-wrapper {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;    // clips dot while expanding
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ── Hero image ─────────────────────────────────────────────────────────
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+
+  // Starts dark — GSAP animates brightness
+  filter: brightness(0.05) contrast(1.2);
+  transform: scale(0.85);
+
+  will-change: filter, transform;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+// ── Overlay text ───────────────────────────────────────────────────────
+.overlay-text {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  text-align: center;
+  color: #fff;
+  z-index: 2;
+  pointer-events: none;
+
+  // GPU layer pre-promoted — no lag
+  transform: translate3d(-50%, 60px, 0);
+  opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  h1 {
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    white-space: nowrap;
+    text-shadow: 0 4px 40px rgba(0, 0, 0, 0.6);
+    backface-visibility: hidden;
+  }
+
+  p {
+    font-size: clamp(0.8rem, 1.8vw, 1.1rem);
+    opacity: 0.6;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    backface-visibility: hidden;
+  }
+}
+
+// The "?" character — dot of this char is the dot origin
+.mark {
+  display: inline-block;
+  color: inherit;
+}
+
+// ── White dot — expands from "?" → full screen ─────────────────────────
+.dot {
+  position: absolute;     // inside sticky-wrapper (overflow: hidden clips it)
+  border-radius: 50%;
+  background: #fff;       // white wipe = transition to next section
+  z-index: 10;            // above everything
+
+  // GSAP sets: width/height/top/left/scale/x/y
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translate3d(-50%, -50%, 0) scale(0);
+}

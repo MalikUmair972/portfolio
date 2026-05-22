@@ -1,0 +1,25 @@
+<!-- scroll-transition.html -->
+<section #sectionRef class="scroll-section">
+
+  <div #wrapperRef class="sticky-wrapper">
+
+    <!-- Hero image — dark initially, GSAP controls brightness -->
+    <img
+      #imgRef
+      src="assets/images/myimage.png"
+      alt="Hero"
+      class="hero-img"
+    />
+
+    <!-- Text — fades in after image lights up -->
+    <div #titleRef class="overlay-text">
+      <h1>Services<span #markRef class="mark">?</span></h1>
+      <p>Scroll to explore</p>
+    </div>
+
+    <!-- Dot — expands from "?" dot → fills entire screen -->
+    <div #dotRef class="dot"></div>
+
+  </div>
+
+</section>
