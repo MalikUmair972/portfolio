@@ -1,0 +1,60 @@
+// three-background.scss
+
+:host {
+  display: block;
+}
+
+// ── Tall scroll section ────────────────────────────────────────────────
+.disintegration-section {
+  height: 300vh;
+  background: #000;
+}
+
+// ── Sticky wrapper — pinned by GSAP ───────────────────────────────────
+.sticky-wrapper {
+  position: relative;     // ✅ relative — NOT fixed/sticky via CSS
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;       // ✅ clips particle canvases to this box
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ── Original capture element ───────────────────────────────────────────
+.capture-box {
+  // NOT fixed — stays inside wrapper only
+  width: 600px;
+  height: 400px;
+  position: relative;
+  z-index: 1;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+// ── Container where particle canvases live ────────────────────────────
+.canvas-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+// ── Each disintegration canvas ─────────────────────────────────────────
+// (class added dynamically by TS)
+:host ::ng-deep .particle-canvas {
+  position: absolute;
+  // Centered via parent flexbox — GSAP moves them with x/y
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  pointer-events: none;
+}

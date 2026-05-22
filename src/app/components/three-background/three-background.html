@@ -1,1 +1,21 @@
-<p>three-background works!</p>
+<!-- three-background.html -->
+<section #sectionRef class="disintegration-section">
+
+  <!-- Sticky viewport wrapper -->
+  <div #wrapperRef class="sticky-wrapper">
+
+    <!-- Original image — html2canvas captures this then hides it -->
+    <div #captureRef class="capture-box">
+      <img
+        src="assets/images/myimage.png"
+        alt="Disintegration"
+        crossorigin="anonymous"
+      />
+    </div>
+
+    <!-- ✅ Particle canvases append HERE — not body — so they stay clipped -->
+    <div #canvasWrap class="canvas-container"></div>
+
+  </div>
+
+</section>
