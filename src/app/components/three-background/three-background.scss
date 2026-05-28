@@ -1,60 +1,171 @@
 // three-background.scss
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
 
-:host {
-  display: block;
-}
+:host { display: block; }
 
-// ── Tall scroll section ────────────────────────────────────────────────
+// ── Scroll container ────────────────────────────────────────────────────
 .disintegration-section {
   height: 300vh;
-  background: #000;
+  background: #060608;
 }
 
-// ── Sticky wrapper — pinned by GSAP ───────────────────────────────────
+// ── Sticky viewport ─────────────────────────────────────────────────────
 .sticky-wrapper {
-  position: relative;     // ✅ relative — NOT fixed/sticky via CSS
+  position: relative;
   height: 100vh;
   width: 100%;
-  overflow: hidden;       // ✅ clips particle canvases to this box
-  background: #000;
+  overflow: hidden;
+  background: #060608;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+// ── Video (left) ────────────────────────────────────────────────────────
+.video-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-}
+  padding: 48px 5% 48px 8%;
 
-// ── Original capture element ───────────────────────────────────────────
-.capture-box {
-  // NOT fixed — stays inside wrapper only
-  width: 600px;
-  height: 400px;
-  position: relative;
-  z-index: 1;
-
-  img {
+  video {
     width: 100%;
-    height: 100%;
+    max-width: 560px;
+    aspect-ratio: 16 / 10;
     object-fit: cover;
+    border-radius: 18px;
     display: block;
+    // ✅ NO autoplay, NO loop — scroll controls it
+    will-change: transform;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+
+  // Soft edge vignette
+  .video-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at 30% 50%,
+      transparent 40%,
+      rgba(6,6,8,0.55) 100%
+    );
+    pointer-events: none;
+    border-radius: 18px;
   }
 }
 
-// ── Container where particle canvases live ────────────────────────────
-.canvas-container {
-  position: absolute;
-  inset: 0;
+// ── Right text panel ────────────────────────────────────────────────────
+.side-text {
+  padding: 0 8% 0 4%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+  flex-direction: column;
+  will-change: opacity;
+  position: relative;
   z-index: 2;
 }
 
-// ── Each disintegration canvas ─────────────────────────────────────────
-// (class added dynamically by TS)
-:host ::ng-deep .particle-canvas {
-  position: absolute;
-  // Centered via parent flexbox — GSAP moves them with x/y
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  pointer-events: none;
+.text-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+  display: block;
+  will-change: opacity, transform;
+}
+
+.text-divider {
+  width: 48px;
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+  margin-bottom: 28px;
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.text-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 28px;
+}
+
+.text-line {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(2.2rem, 4vw, 5rem);
+  font-weight: 400;
+  line-height: 1.0;
+  color: #fff;
+  letter-spacing: -0.03em;
+  will-change: opacity, transform;
+  overflow: hidden;
+
+  em {
+    font-style: italic;
+    color: rgba(255,255,255,0.38);
+  }
+}
+
+.text-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+  font-weight: 300;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.38);
+  margin-bottom: 36px;
+  will-change: opacity, transform;
+}
+
+.text-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 28px;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 100px;
+  color: #fff;
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.83rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+  will-change: opacity, transform;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+
+  svg { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
+
+  &:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+    svg { transform: translate(3px,-3px); }
+  }
+}
+
+// ── Mobile ───────────────────────────────────────────────────────────────
+@media (max-width: 860px) {
+  .sticky-wrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    overflow-y: hidden;
+  }
+
+  .video-box {
+    padding: 32px 6%;
+    height: auto;
+
+    video { max-width: 100%; aspect-ratio: 16/9; }
+  }
+
+  .side-text {
+    padding: 0 6% 40px;
+  }
+
+  .text-line { font-size: clamp(1.8rem, 7vw, 3rem); }
 }
