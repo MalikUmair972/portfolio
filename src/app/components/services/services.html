@@ -1,0 +1,97 @@
+<!-- services.html — magazine list · cursor follower · 3D row tilt · click expand -->
+<section class="srv-section" id="services" #sectionRef
+         (mousemove)="onSectionMove($event)">
+
+  <!-- ── Cursor image follower (fixed, follows mouse) ─────────────────── -->
+  <div class="srv-cursor" #cursorEl aria-hidden="true">
+    <div *ngFor="let s of services; let i = index" class="c-img">
+      <img [src]="s.image" [alt]="s.title">
+    </div>
+  </div>
+
+  <div class="srv-container">
+
+    <!-- ── Section header ────────────────────────────────────────────────── -->
+    <header class="srv-head" #headRef>
+      <div class="srv-head-left">
+        <span class="srv-eyebrow" data-reveal>What we do</span>
+        <h2 class="srv-h2" data-reveal>
+          Our<br><em>Services</em>
+        </h2>
+      </div>
+      <p class="srv-intro" data-reveal>
+        Premium digital craftsmanship at the intersection of design,
+        technology, and human experience.
+      </p>
+    </header>
+
+    <!-- ── Service list ──────────────────────────────────────────────────── -->
+    <div class="srv-list" #listRef>
+
+      <div *ngFor="let s of services; let i = index"
+           class="srv-item"
+           [class.is-open]="activeIndex === i"
+           (mouseenter)="onItemEnter($event, i)"
+           (mouseleave)="onItemLeave($event)"
+           (mousemove)="onItemMove($event)">
+
+        <!-- Top rule -->
+        <div class="srv-line"></div>
+
+        <!-- Main clickable row -->
+        <button class="srv-row" (click)="toggleItem(i)" [attr.aria-expanded]="activeIndex === i">
+          <div class="srv-row-inner">
+            <span class="srv-num">0{{ i + 1 }}</span>
+
+            <div class="srv-row-text">
+              <h3 class="srv-title">{{ s.title }}</h3>
+              <span class="srv-cat">{{ s.category }}</span>
+            </div>
+
+            <span class="srv-year">{{ s.year }}</span>
+
+            <span class="srv-arrow-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                      stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+              </svg>
+            </span>
+          </div>
+        </button>
+
+        <!-- Expandable detail panel -->
+        <div class="srv-detail" [attr.data-idx]="i">
+          <div class="srv-detail-inner">
+
+            <div class="srv-detail-img" data-detail>
+              <img [src]="s.image" [alt]="s.title">
+              <div class="srv-detail-img-overlay"></div>
+            </div>
+
+            <div class="srv-detail-body">
+              <p class="srv-detail-desc" data-detail>{{ s.description }}</p>
+              <div class="srv-pills" data-detail>
+                <span *ngFor="let d of s.deliverables" class="srv-pill">{{ d }}</span>
+              </div>
+              <a href="mailto:hello@studio.co" class="srv-cta" data-detail>
+                <span>Start this project</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /srv-item -->
+
+      <!-- Bottom rule -->
+      <div class="srv-line srv-line--bottom"></div>
+
+    </div><!-- /srv-list -->
+
+  </div><!-- /srv-container -->
+
+</section>
