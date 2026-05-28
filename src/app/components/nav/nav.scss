@@ -1,0 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+@import '../../styles/variables';
+
+:host {
+  display: block;
+}
+
+// ── Root header ────────────────────────────────────────────────────────────
+.nav-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 24px clamp(20px, 4vw, 60px);
+  transition: padding 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.scrolled {
+    padding: 14px clamp(14px, 2.5vw, 36px);
+
+    .nav-inner {
+      background: rgba(6, 9, 52, 0.9);
+      backdrop-filter: blur(28px) saturate(1.6);
+      -webkit-backdrop-filter: blur(28px) saturate(1.6);
+      border-radius: 100px;
+      padding: 6px 8px 6px 28px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08),
+                  0 12px 48px rgba(0, 0, 0, 0.5),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+// ── Inner flex row ─────────────────────────────────────────────────────────
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  max-width: 1400px;
+  margin: 0 auto;
+  transition: background     0.55s ease,
+              border-radius  0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow     0.55s ease,
+              padding        0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              border         0.55s ease;
+}
+
+// ── Logo ───────────────────────────────────────────────────────────────────
+.nav-logo {
+  text-decoration: none;
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
+  will-change: transform;
+  transform-style: preserve-3d;
+  display: block;
+
+  .logo-text {
+    font-family: $font-mono;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.04em;
+    transition: color 0.3s ease;
+    display: block;
+    pointer-events: none;
+
+    .logo-dot {
+      color: var(--accent-2);
+      transition: color 0.3s ease;
+    }
+  }
+
+  &:hover .logo-text {
+    color: var(--accent-2);
+  }
+}
+
+// ── Desktop links wrapper ──────────────────────────────────────────────────
+.nav-links-wrap {
+  display: flex;
+  align-items: stretch;
+  margin-left: auto;
+  position: relative;
+  padding: 4px 0;
+}
+
+// ── Sliding pill indicator ────────────────────────────────────────────────
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  pointer-events: none;
+  will-change: transform, width, opacity;
+  z-index: 0;
+}
+
+// ── Desktop link list ──────────────────────────────────────────────────────
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 100px;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  will-change: transform;
+
+  .link-label {
+    font-family: $font-ui;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.01em;
+    transition: color 0.25s ease;
+    pointer-events: none;
+  }
+
+  &:hover .link-label {
+    color: #fff;
+  }
+
+  &.is-active .link-label {
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 500;
+  }
+}
+
+// ── CTA button ─────────────────────────────────────────────────────────────
+.nav-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 100px;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-family: $font-ui;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+  overflow: hidden;
+  will-change: transform;
+  transition: background     0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color   0.35s ease,
+              color          0.35s ease,
+              box-shadow     0.35s ease;
+
+  svg {
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  span {
+    pointer-events: none;
+  }
+
+  // Shimmer sweep layer
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 70%
+    );
+    transform: translateX(-140%);
+    pointer-events: none;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.26);
+    color: #fff;
+    box-shadow: 0 4px 22px rgba(64, 96, 255, 0.28);
+
+    svg {
+      transform: translate(3px, -3px);
+    }
+
+    &::before {
+      animation: ctaShimmer 0.6s ease forwards;
+    }
+  }
+}
+
+@keyframes ctaShimmer {
+  to { transform: translateX(240%); }
+}
+
+// ── Hamburger ──────────────────────────────────────────────────────────────
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+
+  span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity   0.3s ease;
+    transform-origin: center;
+  }
+
+  &.open {
+    span:first-child { transform: translateY(3.3px)  rotate(45deg); }
+    span:last-child  { transform: translateY(-3.3px) rotate(-45deg); }
+  }
+}
+
+// ── Mobile overlay ─────────────────────────────────────────────────────────
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(5, 8, 48, 0.97);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+
+    .mobile-link {
+      animation: mobileReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+  }
+}
+
+.mobile-overlay-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 100px clamp(24px, 7vw, 80px) 48px;
+}
+
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mobile-link {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0;
+
+  .mobile-link-num {
+    font-family: $font-mono;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.18);
+    width: 22px;
+    flex-shrink: 0;
+  }
+
+  .mobile-link-text {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.2rem, 9vw, 4rem);
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.65);
+    flex: 1;
+    transition: color 0.25s ease;
+  }
+
+  .mobile-link-arrow {
+    color: rgba(255, 255, 255, 0.15);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &:hover {
+    .mobile-link-text  { color: #fff; }
+    .mobile-link-arrow { color: var(--accent-2); transform: translate(5px, -5px); }
+  }
+}
+
+@keyframes mobileReveal {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-footer {
+  padding-top: 36px;
+
+  .mobile-footer-text {
+    font-family: $font-ui;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.18);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+}
+
+// ── Responsive ─────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .nav-links-wrap,
+  .nav-cta {
+    display: none;
+  }
+
+  .nav-burger {
+    display: flex;
+  }
+}
