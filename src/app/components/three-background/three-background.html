@@ -1,20 +1,50 @@
 <!-- three-background.html -->
 <section #sectionRef class="disintegration-section">
 
-  <!-- Sticky viewport wrapper -->
   <div #wrapperRef class="sticky-wrapper">
 
-    <!-- Original image — html2canvas captures this then hides it -->
-    <div #captureRef class="capture-box">
-      <img
-        src="assets/images/myimage.png"
-        alt="Disintegration"
-        crossorigin="anonymous"
-      />
+    <!-- ── Left: looping video ── -->
+    <div class="video-box">
+      <video
+        src="assets/video/A_cinematic_3D_exploded_view_transition_of_a_futuristic_software_dashboard._Floating_glassmorphic_ca_seed31715369.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+      ></video>
+      <div class="video-vignette"></div>
     </div>
 
-    <!-- ✅ Particle canvases append HERE — not body — so they stay clipped -->
-    <div #canvasWrap class="canvas-container"></div>
+    <!-- ── Right: GSAP animated text ── -->
+    <div #textRef class="side-text">
+
+      <span class="text-eyebrow">Full-Stack Engineer · Angular · .NET · SQL</span>
+
+      <div class="text-divider"></div>
+
+      <div class="text-lines">
+        <div class="text-line">Building</div>
+        <div class="text-line">full-stack</div>
+        <div class="text-line"><em>products</em></div>
+        <div class="text-line">that scale</div>
+        <div class="text-line">and last.</div>
+      </div>
+
+      <p class="text-sub">
+        From database to pixel — Angular, .NET,<br>
+        SQL Server, end-to-end.
+      </p>
+
+      <a href="mailto:malikumair501@gmail.com" class="text-cta">
+        <span>Start a project</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"
+                d="M7 17L17 7M17 7H7M17 7v10"/>
+        </svg>
+      </a>
+
+    </div>
 
   </div>
 

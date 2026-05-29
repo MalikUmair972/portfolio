@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+@import '../../styles/variables';
+
+:host {
+  display: block;
+  background: #08090f;
+}
+
+// ── Section ────────────────────────────────────────────────────────────────
+.portfolio-section {
+  background: #08090f;
+  padding: 120px clamp(24px, 6vw, 80px) 120px;
+
+  &.no-top-pad {
+    padding-top: 0;
+  }
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px;
+    opacity: 0.018;
+    pointer-events: none;
+  }
+}
+
+.portfolio-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// ── Header ─────────────────────────────────────────────────────────────────
+.portfolio-header {
+  margin-bottom: 56px;
+}
+
+.header-label {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  margin-bottom: 18px;
+}
+
+.portfolio-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -0.03em;
+  margin: 0 0 20px;
+
+  em {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.portfolio-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.38);
+  max-width: 460px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+// ── Filter ─────────────────────────────────────────────────────────────────
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 22px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.38);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.22);
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #fff;
+  }
+}
+
+// ── Grid ───────────────────────────────────────────────────────────────────
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  margin-bottom: 80px;
+  perspective: 1200px;
+}
+
+.project-card {
+  grid-column: span 4;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  will-change: transform;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: box-shadow 0.4s ease;
+
+  &:hover {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  &.wide {
+    grid-column: span 8;
+  }
+
+  @media (max-width: 1024px) {
+    grid-column: span 6;
+    &.wide { grid-column: span 12; }
+  }
+
+  @media (max-width: 600px) {
+    grid-column: span 12;
+    &.wide { grid-column: span 12; }
+  }
+}
+
+// ── Card image area ────────────────────────────────────────────────────────
+.card-img-wrap {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+
+  .wide & {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .project-card:hover & {
+    transform: scale(1.06);
+  }
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5, 5, 8, 0.9) 0%, rgba(5, 5, 8, 0.35) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+
+  .project-card:hover & {
+    opacity: 1;
+  }
+}
+
+.card-arrow {
+  align-self: flex-end;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transform: translate(-4px, 4px);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .project-card:hover & {
+    transform: translate(0, 0);
+  }
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateY(14px);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .project-card:hover & {
+    transform: translateY(0);
+  }
+}
+
+.card-year {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.38);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.card-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  font-style: italic;
+  font-weight: 400;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.card-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.48);
+  padding: 3px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+}
+
+// ── Card footer strip ──────────────────────────────────────────────────────
+.card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-foot-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.card-foot-cat {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+// ── Card glow (pointer-tracked via --gx / --gy) ───────────────────────────
+.card-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: radial-gradient(
+    circle at var(--gx, 50%) var(--gy, 50%),
+    rgba(64, 96, 255, 0.22) 0%,
+    rgba(32, 255, 160, 0.06) 40%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 4;
+
+  .project-card:hover & {
+    opacity: 1;
+  }
+}
+
+// ── CTA ───────────────────────────────────────────────────────────────────
+.portfolio-cta {
+  display: flex;
+  justify-content: center;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 44px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 100px;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  svg {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.28);
+    color: #fff;
+    transform: translateY(-2px);
+
+    svg {
+      transform: translateX(5px);
+    }
+  }
+}

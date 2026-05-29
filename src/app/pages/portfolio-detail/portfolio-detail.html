@@ -1,0 +1,139 @@
+<!-- portfolio-detail.html -->
+<main class="detail-page" *ngIf="project">
+
+  <!-- ── Back button ─────────────────────────────────────────────────────── -->
+  <button class="back-btn" (click)="goBack()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    <span>Back to Work</span>
+  </button>
+
+  <!-- ── Hero ────────────────────────────────────────────────────────────── -->
+  <section class="detail-hero">
+    <div class="hero-bg-wrap">
+      <img [src]="project.heroImage" [alt]="project.title" class="hero-bg-img">
+      <div class="hero-bg-overlay"></div>
+    </div>
+
+    <div class="detail-hero-content">
+      <span class="hero-eyebrow">{{ project.category }}&nbsp;&nbsp;/&nbsp;&nbsp;{{ project.year }}</span>
+      <h1 class="hero-title">{{ project.title }}</h1>
+      <p class="hero-tagline">{{ project.tagline }}</p>
+
+      <div class="hero-meta-bar">
+        <div class="meta-item" *ngFor="let m of project.meta">
+          <span class="meta-label">{{ m.label }}</span>
+          <span class="meta-value">{{ m.value }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <!-- ── Split 1 — text left · dissolve right ────────────────────────────── -->
+  <section class="split-section split-section-1">
+    <div class="split-inner">
+
+      <div class="split-text s1-text">
+        <span class="section-num">01</span>
+        <h2 class="split-title">{{ project.section1.title }}</h2>
+        <p class="split-body">{{ project.section1.body }}</p>
+        <ul class="deliverables-list">
+          <li *ngFor="let d of project.section1.deliverables">
+            <span class="del-dot"></span>{{ d }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="split-visual">
+        <!-- Dissolve grid: each cell shows one slice of the image -->
+        <div class="dissolve-grid dg-1"
+             [style.grid-template-columns]="'repeat(' + dissolveCols + ', 1fr)'"
+             [style.grid-template-rows]="'repeat(' + dissolveRows + ', 1fr)'">
+          <div *ngFor="let cell of s1Grid"
+               class="d-cell"
+               [style.background-image]="s1BgStyle"
+               [style.background-size]="cell.size"
+               [style.background-position]="cell.pos">
+          </div>
+        </div>
+        <div class="dissolve-caption">
+          <span *ngFor="let tag of project.tags" class="dissolve-tag">{{ tag }}</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Parallax band ───────────────────────────────────────────────────── -->
+  <section class="parallax-band">
+    <div class="band-img-wrap">
+      <img [src]="project.bandImage" [alt]="project.title" class="band-img">
+      <div class="band-overlay"></div>
+    </div>
+    <blockquote class="band-quote">{{ project.quote }}</blockquote>
+  </section>
+
+  <!-- ── Split 2 — dissolve left · text right ────────────────────────────── -->
+  <section class="split-section split-section-2">
+    <div class="split-inner reverse">
+
+      <div class="split-visual">
+        <div class="dissolve-grid dg-2"
+             [style.grid-template-columns]="'repeat(' + dissolveCols + ', 1fr)'"
+             [style.grid-template-rows]="'repeat(' + dissolveRows + ', 1fr)'">
+          <div *ngFor="let cell of s2Grid"
+               class="d-cell"
+               [style.background-image]="s2BgStyle"
+               [style.background-size]="cell.size"
+               [style.background-position]="cell.pos">
+          </div>
+        </div>
+        <div class="dissolve-caption">
+          <span *ngFor="let tag of project.tags" class="dissolve-tag">{{ tag }}</span>
+        </div>
+      </div>
+
+      <div class="split-text s2-text">
+        <span class="section-num">02</span>
+        <h2 class="split-title">{{ project.section2.title }}</h2>
+        <p class="split-body">{{ project.section2.body }}</p>
+        <ul class="deliverables-list">
+          <li *ngFor="let d of project.section2.deliverables">
+            <span class="del-dot"></span>{{ d }}
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Next project ─────────────────────────────────────────────────────── -->
+  <section class="next-project-section">
+    <div class="next-inner">
+      <span class="next-eyebrow">Next Project</span>
+
+      <button class="next-title-btn" (click)="navigateToProject(nextProject.id)">
+        <span class="next-title-text">{{ nextProject.title }}</span>
+        <span class="next-arrow-wrap">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+            <path stroke="currentColor" stroke-width="1" stroke-linecap="round"
+                  stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </button>
+
+      <span class="next-meta">{{ nextProject.category }}&nbsp;&nbsp;/&nbsp;&nbsp;{{ nextProject.year }}</span>
+
+      <div class="next-preview-img">
+        <img [src]="nextProject.image" [alt]="nextProject.title">
+      </div>
+    </div>
+  </section>
+
+</main>

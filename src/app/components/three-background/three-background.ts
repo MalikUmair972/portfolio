@@ -8,8 +8,6 @@ import {
 } from '@angular/core';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import html2canvas from 'html2canvas';
-import imagesLoaded from 'imagesloaded';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,116 +15,78 @@ gsap.registerPlugin(ScrollTrigger);
   selector: 'app-three-background',
   standalone: false,
   templateUrl: './three-background.html',
-  styleUrl: './three-background.scss',
+  styleUrl:    './three-background.scss',
 })
 export class ThreeBackground implements AfterViewInit, OnDestroy {
 
-  // The element to capture
-  @ViewChild('captureRef')  captureRef!:  ElementRef<HTMLElement>;
-  // Container where canvases will be appended (NOT body)
-  @ViewChild('canvasWrap')  canvasWrap!:  ElementRef<HTMLElement>;
-  @ViewChild('sectionRef')  sectionRef!:  ElementRef<HTMLElement>;
-  @ViewChild('wrapperRef')  wrapperRef!:  ElementRef<HTMLElement>;
+  @ViewChild('sectionRef') sectionRef!: ElementRef<HTMLElement>;
+  @ViewChild('wrapperRef') wrapperRef!: ElementRef<HTMLElement>;
+  @ViewChild('textRef')    textRef!:    ElementRef<HTMLElement>;
 
-  private readonly COUNT        = 75;
-  private readonly REPEAT_COUNT = 3;
-  private createdCanvases: HTMLCanvasElement[] = [];
+  private triggers: ScrollTrigger[] = [];
 
   constructor(private ngZone: NgZone) {}
 
   ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
-      const captureEl = this.captureRef.nativeElement;
-      const imgs      = Array.from(captureEl.querySelectorAll('img'));
+      const section = this.sectionRef.nativeElement;
+      const wrapper = this.wrapperRef.nativeElement;
 
-      // Pin wrapper for sticky scroll
-      ScrollTrigger.create({
-        trigger: this.sectionRef.nativeElement,
-        start: 'top top',
-        end: 'bottom bottom',
-        pin: this.wrapperRef.nativeElement,
-        pinSpacing: false,
+      // Pin sticky wrapper
+      this.triggers.push(ScrollTrigger.create({
+        trigger:       section,
+        start:         'top top',
+        end:           'bottom bottom',
+        pin:           wrapper,
+        pinSpacing:    false,
         anticipatePin: 1,
         invalidateOnRefresh: true,
-      });
+      }));
 
-      // Wait for image load then capture
-      imagesLoaded(imgs).on('always', () => {
-        this.createDisintegration(captureEl);
-      });
+      this.animateText(section);
     });
   }
 
-  private createDisintegration(captureEl: HTMLElement): void {
-    const canvasWrap = this.canvasWrap.nativeElement;
-    const section    = this.sectionRef.nativeElement;
+  // ── Right-side text scroll animation ───────────────────────────────────
+  private animateText(section: HTMLElement): void {
+    const textEl  = this.textRef.nativeElement;
+    const lines   = textEl.querySelectorAll<HTMLElement>('.text-line');
+    const eyebrow = textEl.querySelector<HTMLElement>('.text-eyebrow');
+    const divider = textEl.querySelector<HTMLElement>('.text-divider');
+    const sub     = textEl.querySelector<HTMLElement>('.text-sub');
+    const cta     = textEl.querySelector<HTMLElement>('.text-cta');
 
-    html2canvas(captureEl, { useCORS: true, allowTaint: true }).then((canvas) => {
-      const width   = canvas.width;
-      const height  = canvas.height;
-      const ctx     = canvas.getContext('2d')!;
-      const imgData = ctx.getImageData(0, 0, width, height);
+    gsap.set(textEl,  { opacity: 0 });
+    gsap.set(eyebrow, { opacity: 0, y: 24 });
+    gsap.set(divider, { scaleX: 0, transformOrigin: 'left center' });
+    gsap.set(lines,   { opacity: 0, y: 50, skewY: 5 });
+    gsap.set(sub,     { opacity: 0, y: 20 });
+    gsap.set(cta,     { opacity: 0, y: 16 });
 
-      // Hide original — canvases take over
-      captureEl.style.visibility = 'hidden';
-
-      // Build COUNT empty ImageData layers
-      const dataList: ImageData[] = Array.from(
-        { length: this.COUNT },
-        () => ctx.createImageData(width, height)
-      );
-
-      // Distribute pixels across layers (disintegration algorithm)
-      for (let x = 0; x < width; x++) {
-        for (let y = 0; y < height; y++) {
-          for (let l = 0; l < this.REPEAT_COUNT; l++) {
-            const idx       = (x + y * width) * 4;
-            const dataIndex = Math.floor(
-              (this.COUNT * (Math.random() + (2 * x) / width)) / 3
-            );
-            for (let p = 0; p < 4; p++) {
-              dataList[dataIndex].data[idx + p] = imgData.data[idx + p];
-            }
-          }
-        }
-      }
-
-      // One canvas per layer — append to canvasWrap (NOT body)
-      dataList.forEach((data, i) => {
-        const cloned = canvas.cloneNode() as HTMLCanvasElement;
-        cloned.getContext('2d')!.putImageData(data, 0, 0);
-        cloned.classList.add('particle-canvas');
-        canvasWrap.appendChild(cloned);   // ✅ inside wrapper, not body
-        this.createdCanvases.push(cloned);
-
-        const angle   = (Math.random() - 0.5) * 2 * Math.PI;
-        const rotDeg  = 30 * (Math.random() - 0.5);
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: section,
-            scrub: 1,
-            start: 'top top',
-            end: 'bottom bottom',
-            invalidateOnRefresh: true,
-          },
-        });
-
-        tl.to(cloned, {
-          duration: 1,
-          rotate: rotDeg,
-          x: 120 * Math.sin(angle),    // more spread inside container
-          y: 120 * Math.cos(angle),
-          opacity: 0,
-          delay: (i / this.COUNT) * 2,
-          ease: 'none',
-        });
-      });
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start:   'top top',
+        end:     '45% bottom',
+        scrub:   1.5,
+        invalidateOnRefresh: true,
+      },
     });
+
+    tl.to(textEl,  { opacity: 1, duration: 0.4 },                              0)
+      .to(eyebrow, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },    0.1)
+      .to(divider, { scaleX: 1, duration: 1.4, ease: 'expo.out' },             0.3)
+      .to(lines,   { opacity: 1, y: 0, skewY: 0,
+                     stagger: 0.12, duration: 1.4, ease: 'power4.out' },        0.5)
+      .to(sub,     { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' },    1.4)
+      .to(cta,     { opacity: 1, y: 0, duration: 1.0, ease: 'power2.out' },    1.7);
+
+    if (tl.scrollTrigger) {
+      this.triggers.push(tl.scrollTrigger as unknown as ScrollTrigger);
+    }
   }
 
   ngOnDestroy(): void {
-    this.createdCanvases.forEach(c => c.remove());
-    ScrollTrigger.getAll().forEach(t => t.kill());
+    this.triggers.forEach(t => t?.kill());
   }
 }

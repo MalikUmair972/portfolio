@@ -1,0 +1,74 @@
+<!-- portfolio.html -->
+<section class="portfolio-section" [class.no-top-pad]="isPortfolioPage">
+  <div class="portfolio-container">
+
+    <!-- Header — hidden on /portfolio page (has its own hero) -->
+    <div class="portfolio-header" #headerRef *ngIf="!isPortfolioPage">
+      <span class="header-label">Selected Work</span>
+      <h2 class="portfolio-title">Full-stack<br><em>in production.</em></h2>
+      <p class="portfolio-sub">
+        Angular · .NET · SQL Server — SaaS & ERP systems built end-to-end.
+      </p>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <button *ngFor="let f of filters"
+              class="filter-btn"
+              [class.active]="activeFilter === f"
+              (click)="setFilter(f)">
+        {{ f }}
+      </button>
+    </div>
+
+    <!-- Grid -->
+    <div class="project-grid" #gridRef>
+      <article
+        *ngFor="let p of filteredProjects; trackBy: trackById"
+        class="project-card"
+        [class.wide]="p.wide"
+        [attr.data-project-id]="p.id"
+      >
+        <div class="card-img-wrap">
+          <img [src]="p.image" [alt]="p.title" class="card-img" loading="lazy">
+
+          <div class="card-overlay">
+            <div class="card-arrow">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                      stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+              </svg>
+            </div>
+            <div class="card-info">
+              <span class="card-year">{{ p.year }}</span>
+              <h3 class="card-title">{{ p.title }}</h3>
+              <div class="card-tags">
+                <span *ngFor="let tag of p.tags" class="card-tag">{{ tag }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-foot">
+          <span class="card-foot-title">{{ p.title }}</span>
+          <span class="card-foot-cat">{{ p.category }}</span>
+        </div>
+
+        <!-- Glow layer driven by CSS custom props --gx / --gy set in TS -->
+        <div class="card-glow"></div>
+      </article>
+    </div>
+
+    <!-- CTA — hidden when already on the portfolio page -->
+    <div class="portfolio-cta" #ctaRef *ngIf="!isPortfolioPage">
+      <button class="cta-btn" (click)="navigateAll()">
+        <span>View All Projects</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</section>
