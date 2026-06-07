@@ -5,7 +5,6 @@ import {
   ViewChild,
   ElementRef,
   NgZone,
-  HostListener,
   ChangeDetectorRef,
 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
@@ -48,6 +47,8 @@ export class Nav implements AfterViewInit, OnDestroy {
   private indicatorVisible = false;
   private qiX!: gsap.QuickToFunc;
   private qiW!: gsap.QuickToFunc;
+  private rafPending = false;
+  private scrollBound!: () => void;
 
   constructor(
     private router: Router,
@@ -55,14 +56,21 @@ export class Nav implements AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
   ) {}
 
-  @HostListener('window:scroll')
-  onWindowScroll(): void {
-    const was = this.scrolled;
-    this.scrolled = window.scrollY > 60;
-    if (was !== this.scrolled) this.cdr.detectChanges();
-  }
-
   ngAfterViewInit(): void {
+    // ── Passive rAF-throttled scroll — never blocks the main thread ──────────
+    this.scrollBound = () => {
+      if (this.rafPending) return;
+      this.rafPending = true;
+      requestAnimationFrame(() => {
+        this.rafPending = false;
+        const nowScrolled = window.scrollY > 60;
+        if (nowScrolled !== this.scrolled) {
+          this.scrolled = nowScrolled;
+          this.ngZone.run(() => this.cdr.detectChanges());
+        }
+      });
+    };
+    window.addEventListener('scroll', this.scrollBound, { passive: true });
     this.ngZone.runOutsideAngular(() => {
       const root      = this.navRoot.nativeElement;
       const logo      = this.logoRef.nativeElement;
@@ -234,6 +242,7 @@ export class Nav implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+    window.removeEventListener('scroll', this.scrollBound);
     document.body.style.overflow = '';
   }
 }
