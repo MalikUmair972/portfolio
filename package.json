@@ -26,6 +26,7 @@
     "@angular/forms": "^20.1.0",
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "@emailjs/browser": "^4.4.1",
     "@splinetool/runtime": "^1.12.92",
     "@studio-freight/lenis": "^1.0.42",
     "@types/three": "^0.128.0",
