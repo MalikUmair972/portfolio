@@ -13,7 +13,7 @@
   <!-- ── Hero ────────────────────────────────────────────────────────────── -->
   <section class="detail-hero">
     <div class="hero-bg-wrap">
-      <img [src]="project.heroImage" [alt]="project.title" class="hero-bg-img">
+      <img [src]="project.heroImage" [alt]="project.title" class="hero-bg-img" decoding="async">
       <div class="hero-bg-overlay"></div>
     </div>
 
@@ -73,7 +73,7 @@
   <!-- ── Parallax band ───────────────────────────────────────────────────── -->
   <section class="parallax-band">
     <div class="band-img-wrap">
-      <img [src]="project.bandImage" [alt]="project.title" class="band-img">
+      <img [src]="project.bandImage" [alt]="project.title" class="band-img" loading="lazy" decoding="async">
       <div class="band-overlay"></div>
     </div>
     <blockquote class="band-quote">{{ project.quote }}</blockquote>
