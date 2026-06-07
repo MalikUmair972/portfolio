@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
 @import '../../styles/variables';
 
 :host {
@@ -294,6 +293,63 @@
   }
 }
 
+// ── Mobile / touch overrides ──────────────────────────────────────────────
+@media (hover: none) {
+  // Card overlay always visible on touch — :hover never fires
+  .card-overlay {
+    opacity: 1;
+    background: linear-gradient(
+      to top,
+      rgba(5, 5, 8, 0.88) 0%,
+      rgba(5, 5, 8, 0.2) 55%,
+      transparent 100%
+    );
+  }
+
+  .card-info {
+    transform: translateY(0);
+  }
+
+  // Arrow icon not needed on touch — user taps card body
+  .card-arrow {
+    display: none;
+  }
+
+  // Disable 3D compositing overhead — no pointer tilt on touch anyway
+  .project-card {
+    transform-style: flat;
+  }
+}
+
+@media (max-width: 768px) {
+  .portfolio-section {
+    padding: 64px clamp(16px, 5vw, 32px) 64px;
+
+    &.no-top-pad {
+      padding-top: 0;
+    }
+  }
+
+  .portfolio-header {
+    margin-bottom: 36px;
+  }
+
+  .project-grid {
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-section {
+    padding: 48px 16px 48px;
+
+    &.no-top-pad {
+      padding-top: 0;
+    }
+  }
+}
+
 // ── CTA ───────────────────────────────────────────────────────────────────
 .portfolio-cta {
   display: flex;
@@ -308,15 +364,20 @@
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 100px;
   color: rgba(255, 255, 255, 0.65);
+  background: none;
+  cursor: pointer;
   text-decoration: none;
   font-family: 'DM Sans', sans-serif;
   font-size: 0.88rem;
   font-weight: 400;
   letter-spacing: 0.02em;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  transition: background 0.35s ease, border-color 0.35s ease,
+              color 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 
   svg {
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
   }
 
   &:hover {
@@ -324,9 +385,6 @@
     border-color: rgba(255, 255, 255, 0.28);
     color: #fff;
     transform: translateY(-2px);
-
-    svg {
-      transform: translateX(5px);
-    }
+    svg { transform: translateX(5px); }
   }
 }

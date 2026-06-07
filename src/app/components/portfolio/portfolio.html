@@ -12,14 +12,14 @@
     </div>
 
     <!-- Filter -->
-    <div class="filter-bar">
+    <!-- <div class="filter-bar">
       <button *ngFor="let f of filters"
               class="filter-btn"
               [class.active]="activeFilter === f"
               (click)="setFilter(f)">
         {{ f }}
       </button>
-    </div>
+    </div> -->
 
     <!-- Grid -->
     <div class="project-grid" #gridRef>
@@ -30,7 +30,7 @@
         [attr.data-project-id]="p.id"
       >
         <div class="card-img-wrap">
-          <img [src]="p.image" [alt]="p.title" class="card-img" loading="lazy">
+          <img [src]="p.image" [alt]="p.title" class="card-img" loading="lazy" decoding="async">
 
           <div class="card-overlay">
             <div class="card-arrow">

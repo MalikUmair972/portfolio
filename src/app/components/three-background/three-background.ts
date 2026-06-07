@@ -29,26 +29,31 @@ export class ThreeBackground implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
-      const section = this.sectionRef.nativeElement;
-      const wrapper = this.wrapperRef.nativeElement;
+      const isMobile = window.matchMedia('(max-width: 860px)').matches;
+      const section  = this.sectionRef.nativeElement;
+      const wrapper  = this.wrapperRef.nativeElement;
 
-      // Pin sticky wrapper
-      this.triggers.push(ScrollTrigger.create({
-        trigger:       section,
-        start:         'top top',
-        end:           'bottom bottom',
-        pin:           wrapper,
-        pinSpacing:    false,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      }));
-
-      this.animateText(section);
+      if (isMobile) {
+        // ── Mobile: no pin, no scrub — simple once reveal ────────────────
+        this.animateTextOnce();
+      } else {
+        // ── Desktop: pin + scrub ─────────────────────────────────────────
+        this.triggers.push(ScrollTrigger.create({
+          trigger:       section,
+          start:         'top top',
+          end:           'bottom bottom',
+          pin:           wrapper,
+          pinSpacing:    false,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        }));
+        this.animateTextScrub(section);
+      }
     });
   }
 
-  // ── Right-side text scroll animation ───────────────────────────────────
-  private animateText(section: HTMLElement): void {
+  // ── Desktop: scrub-driven text reveal ──────────────────────────────────────
+  private animateTextScrub(section: HTMLElement): void {
     const textEl  = this.textRef.nativeElement;
     const lines   = textEl.querySelectorAll<HTMLElement>('.text-line');
     const eyebrow = textEl.querySelector<HTMLElement>('.text-eyebrow');
@@ -73,17 +78,45 @@ export class ThreeBackground implements AfterViewInit, OnDestroy {
       },
     });
 
-    tl.to(textEl,  { opacity: 1, duration: 0.4 },                              0)
-      .to(eyebrow, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },    0.1)
-      .to(divider, { scaleX: 1, duration: 1.4, ease: 'expo.out' },             0.3)
+    tl.to(textEl,  { opacity: 1, duration: 0.4 },                             0)
+      .to(eyebrow, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },   0.1)
+      .to(divider, { scaleX: 1, duration: 1.4, ease: 'expo.out' },            0.3)
       .to(lines,   { opacity: 1, y: 0, skewY: 0,
-                     stagger: 0.12, duration: 1.4, ease: 'power4.out' },        0.5)
-      .to(sub,     { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' },    1.4)
-      .to(cta,     { opacity: 1, y: 0, duration: 1.0, ease: 'power2.out' },    1.7);
+                     stagger: 0.12, duration: 1.4, ease: 'power4.out' },       0.5)
+      .to(sub,     { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' },   1.4)
+      .to(cta,     { opacity: 1, y: 0, duration: 1.0, ease: 'power2.out' },   1.7);
 
     if (tl.scrollTrigger) {
       this.triggers.push(tl.scrollTrigger as unknown as ScrollTrigger);
     }
+  }
+
+  // ── Mobile: simple once scroll reveal — no scrub, no pin ───────────────────
+  private animateTextOnce(): void {
+    const textEl  = this.textRef.nativeElement;
+    const lines   = textEl.querySelectorAll<HTMLElement>('.text-line');
+    const eyebrow = textEl.querySelector<HTMLElement>('.text-eyebrow');
+    const divider = textEl.querySelector<HTMLElement>('.text-divider');
+    const sub     = textEl.querySelector<HTMLElement>('.text-sub');
+    const cta     = textEl.querySelector<HTMLElement>('.text-cta');
+
+    // Reveal whole block when it enters viewport
+    gsap.set([eyebrow, divider, lines, sub, cta], { opacity: 0, y: 30 });
+
+    const st = ScrollTrigger.create({
+      trigger: textEl,
+      start:   'top 85%',
+      once:    true,
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
+          .to(divider,  { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.4')
+          .to(lines,    { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' }, '-=0.3')
+          .to(sub,      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+          .to(cta,      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2');
+      },
+    });
+    this.triggers.push(st);
   }
 
   ngOnDestroy(): void {

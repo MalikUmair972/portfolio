@@ -14,14 +14,14 @@
     <!-- ── Section header ────────────────────────────────────────────────── -->
     <header class="srv-head" #headRef>
       <div class="srv-head-left">
-        <span class="srv-eyebrow" data-reveal>What we do</span>
+        <span class="srv-eyebrow" data-reveal>What I build</span>
         <h2 class="srv-h2" data-reveal>
-          Our<br><em>Services</em>
+          My<br><em>Services</em>
         </h2>
       </div>
       <p class="srv-intro" data-reveal>
-        Premium digital craftsmanship at the intersection of design,
-        technology, and human experience.
+        Full-stack engineering — Angular frontends, .NET backends,
+        and SQL Server databases, shipped end-to-end.
       </p>
     </header>
 
@@ -73,7 +73,7 @@
               <div class="srv-pills" data-detail>
                 <span *ngFor="let d of s.deliverables" class="srv-pill">{{ d }}</span>
               </div>
-              <a href="mailto:hello@studio.co" class="srv-cta" data-detail>
+              <a [routerLink]="[ '/contact' ]"class="srv-cta" data-detail>
                 <span>Start this project</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                   <path stroke="currentColor" stroke-width="2" stroke-linecap="round"

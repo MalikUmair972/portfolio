@@ -26,6 +26,10 @@ export class Hero implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
+      // ── Skip heavy WebGL on mobile — native scroll is smoother without it ──
+      const isMobile = window.matchMedia('(max-width: 860px)').matches;
+      if (isMobile) return;
+
       const container = this.host.nativeElement.querySelector<HTMLElement>('.hero-container');
       if (!container) return;
 

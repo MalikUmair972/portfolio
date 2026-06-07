@@ -99,6 +99,8 @@ export class Portfolio implements AfterViewInit, OnDestroy {
     }, 20);
   }
 
+  private readonly isTouch = window.matchMedia('(hover: none)').matches;
+
   private bindCardInteractions(): void {
     setTimeout(() => {
       const cards = this.gridRef?.nativeElement.querySelectorAll('.project-card') as NodeListOf<HTMLElement>;
@@ -110,6 +112,7 @@ export class Portfolio implements AfterViewInit, OnDestroy {
         const projectId = card.getAttribute('data-project-id');
 
         const onMove = (e: PointerEvent) => {
+          if (this.isTouch) return; // skip 3D tilt on touch
           const rect = card.getBoundingClientRect();
           const x = (e.clientX - rect.left) / rect.width;
           const y = (e.clientY - rect.top)  / rect.height;
@@ -128,6 +131,7 @@ export class Portfolio implements AfterViewInit, OnDestroy {
         };
 
         const onLeave = () => {
+          if (this.isTouch) return;
           gsap.to(card, {
             rotateX: 0,
             rotateY: 0,

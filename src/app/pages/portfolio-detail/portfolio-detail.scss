@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
 @import '../../styles/variables';
 
 // ── Host ──────────────────────────────────────────────────────────────────────
@@ -482,4 +481,60 @@
   }
 
   @media (max-width: 900px) { display: none; }
+}
+
+// ── Mobile overrides ──────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .back-btn {
+    top: 72px;
+    left: 16px;
+    padding: 8px 14px 8px 10px;
+    font-size: 0.7rem;
+  }
+
+  .detail-hero {
+    min-height: 70vh;
+    align-items: flex-end;
+  }
+
+  .detail-hero-content {
+    padding: 24px 20px clamp(60px, 8vh, 100px);
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 10vw, 4rem);
+  }
+
+  .hero-meta-bar {
+    gap: 20px;
+  }
+
+  .split-section {
+    padding: clamp(48px, 8vh, 80px) 20px;
+  }
+
+  .parallax-band {
+    height: clamp(220px, 40vh, 360px);
+  }
+
+  .next-project-section {
+    padding: clamp(48px, 8vh, 80px) 20px;
+  }
+
+  .next-title-text {
+    font-size: clamp(2rem, 10vw, 4rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: clamp(2rem, 11vw, 3rem); }
+
+  .dissolve-grid {
+    aspect-ratio: 4 / 3;
+    border-radius: 10px;
+  }
+
+  .meta-value { font-size: 0.8rem; }
+
+  .deliverables-list li { font-size: 0.8rem; }
 }

@@ -1,17 +1,56 @@
+// ── Fonts (single import — removes 6 duplicate requests) ─────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
 @import '../src/app/styles/variables';
 @import '../src/app/styles/animations';
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+// ── Reset ─────────────────────────────────────────────────────────────────────
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html,
-body {
-    overflow-x: hidden;
-    background: var(--dark-navy);
-    color: var(--white);
-    font-family: $font-ui;
+// ── Global performance ────────────────────────────────────────────────────────
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeSpeed;
+  font-display: swap;
+  scroll-behavior: auto; // Lenis controls scroll; native smooth adds double-smoothing
+}
+
+html, body {
+  overflow-x: hidden;
+  background: var(--dark-navy);
+  color: var(--white);
+  font-family: $font-ui;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ── Section containment — stops per-section repaints triggering full-page ─────
+app-hero,
+app-scroll-transition,
+app-three-background,
+app-services,
+app-portfolio,
+app-portfolio-page {
+  display: block;
+  contain: layout paint;
+}
+
+// ── GPU-promote every will-change element at the root ─────────────────────────
+[will-change="transform"],
+[will-change="opacity, transform"] {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+// ── Touch / pointer safety ────────────────────────────────────────────────────
+@media (hover: none) {
+  // Hide cursor follower on touch devices
+  .srv-cursor { display: none !important; }
+  // Disable card glow on touch
+  .card-glow  { display: none !important; }
 }
 
