@@ -36,52 +36,52 @@ export class Services implements AfterViewInit, OnDestroy {
 
   services: ServiceData[] = [
     {
-      title:        'Web Design & Development',
-      category:     'Digital Products',
+      title:        'Full-Stack Application Development',
+      category:     'Angular · .NET · SQL Server',
       year:         '2024',
-      image:        'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80',
-      description:  'Immersive, award-winning web platforms that combine bleeding-edge visual aesthetics with blazing performance. Interactive narratives, flawless responsiveness, and code built to last.',
-      deliverables: ['Interactive Front-end', 'Creative Technology', 'Headless CMS', 'Web Performance'],
+      image:        'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80',
+      description:  'End-to-end web application development — Angular on the frontend, .NET Web API on the backend, and SQL Server underneath. From authentication and role-based access control to complex business workflows, I build production-ready systems that scale.',
+      deliverables: ['Angular SPA', '.NET Web API', 'SQL Server DB', 'Role-based Auth'],
     },
     {
-      title:        '3D Visual Storytelling',
-      category:     'WebGL Experience',
+      title:        'ERP & SaaS Platform Engineering',
+      category:     'Enterprise Systems',
       year:         '2024',
-      image:        'https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=800&q=80',
-      description:  'Custom WebGL environments that captivate and convert. Shader development, physically-based lighting, optimised geometries, and real-time rendering pipelines built for the web.',
-      deliverables: ['WebGL Environments', 'Shader Development', '3D Asset Optimisation', 'Interactive Simulations'],
+      image:        'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+      description:  'Custom ERP and SaaS platforms built from the ground up — multi-module, multi-tenant, and production-hardened. Inventory management, procurement workflows, POS systems, and approval chains delivered as a unified Angular + .NET solution.',
+      deliverables: ['Multi-module ERP', 'SaaS Architecture', 'Approval Workflows', 'Multi-tenancy'],
     },
     {
-      title:        'Motion & Animation',
-      category:     'Dynamic Branding',
-      year:         '2023',
-      image:        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80',
-      description:  'Fluid, choreographed motion that turns static interfaces into living experiences. Micro-interactions, scroll-driven sequences, and entrance animations — all polished to perfection.',
-      deliverables: ['GSAP Timelines', 'Lottie & Rive', 'UI Micro-interactions', 'Scroll Animations'],
-    },
-    {
-      title:        'Interactive Experiences',
-      category:     'Creative Technology',
+      title:        'API & Backend Development',
+      category:     '.NET · REST · Dapper',
       year:         '2024',
-      image:        'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
-      description:  'Bespoke digital installations, games, and rich interactive applications that surprise, delight, and retain visitors through the lens of game-design principles.',
-      deliverables: ['Gamified Websites', 'Installations', 'Audio-visual Synthesis', 'Physics Interfaces'],
+      image:        'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80',
+      description:  'High-performance REST APIs built with .NET — clean architecture, Dapper and ADO.NET for data access, and SQL Server stored procedures for complex queries. Designed for speed, security, and maintainability from day one.',
+      deliverables: ['.NET REST API', 'Dapper & ADO.NET', 'Stored Procedures', 'Clean Architecture'],
     },
     {
-      title:        'Brand Identity',
-      category:     'Art Direction',
-      year:         '2023',
-      image:        'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&q=80',
-      description:  'Defining the core essence of modern brands. We establish typography systems, colour language, and visual guidelines aligned with ambitious digital-first organisations.',
-      deliverables: ['Logo & Brandmarks', 'Typography Systems', 'Visual Identity', 'Design Systems'],
-    },
-    {
-      title:        'Creative Direction',
-      category:     'Strategy & Concept',
+      title:        'Database Design & Optimisation',
+      category:     'SQL Server',
       year:         '2024',
-      image:        'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=800&q=80',
-      description:  'The vision that unites design, technology, and strategy. We provide creative direction that shapes memorable digital narratives and guides multi-disciplinary teams with clarity.',
-      deliverables: ['Concept Development', 'Interface Strategy', 'UX Copy', 'Aesthetic Consultation'],
+      image:        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+      description:  'SQL Server schema design, query optimisation, and data modelling for systems that handle millions of rows. Normalised schemas, indexed views, partitioned tables, and ETL pipelines that keep reporting dashboards fast even over 10+ years of historical data.',
+      deliverables: ['Schema Design', 'Query Optimisation', 'Indexed Views', 'ETL Pipelines'],
+    },
+    {
+      title:        'Ecommerce & Third-party Integrations',
+      category:     'Shopify · BigCommerce · WooCommerce',
+      year:         '2024',
+      image:        'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80',
+      description:  'Seamless integrations between .NET backends and ecommerce platforms — Shopify, BigCommerce, WooCommerce, and Magento. Automatic order sync, real-time inventory updates, multi-carrier shipping automation, and webhook-driven event pipelines.',
+      deliverables: ['Shopify Integration', 'Order & Inventory Sync', 'Carrier Automation', 'Webhook Pipelines'],
+    },
+    {
+      title:        'Analytics Dashboards & Reporting',
+      category:     'BI · Charts · Data Export',
+      year:         '2024',
+      image:        'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80',
+      description:  'Business intelligence dashboards built in Angular — interactive charts, KPI scorecards, period-over-period comparisons, and drill-down navigation over years of historical data. PDF and Excel export included as standard.',
+      deliverables: ['Interactive Charts', 'KPI Dashboards', 'Period Comparisons', 'PDF & Excel Export'],
     },
   ];
 
@@ -141,10 +141,14 @@ export class Services implements AfterViewInit, OnDestroy {
   }
 
   // ── Global mouse move (updates cursor follower) ──────────────────────────
+  // Use section-relative coords — contain:layout on app-services makes the
+  // cursor's position: absolute relative to the section, not the viewport,
+  // so clientX/Y (viewport coords) would place it in the wrong spot.
   onSectionMove(e: MouseEvent): void {
     this.ngZone.runOutsideAngular(() => {
-      this.qx(e.clientX);
-      this.qy(e.clientY);
+      const rect = this.sectionRef.nativeElement.getBoundingClientRect();
+      this.qx(e.clientX - rect.left);
+      this.qy(e.clientY - rect.top);
     });
   }
 
