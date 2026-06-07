@@ -116,3 +116,85 @@
   position: absolute;
   inset: 0;
 }
+
+// ── Mobile fallback hero (shown when Spline is skipped) ──────────────────────
+.hero-mobile-fallback {
+  display: none; // hidden on desktop — Spline is the hero
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 0 32px;
+  pointer-events: none;
+
+  @media (max-width: 860px) {
+    display: flex;
+  }
+}
+
+.hf-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 60%, rgba(64, 96, 255, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 30% 40%, rgba(32, 255, 160, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  animation: hfPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes hfPulse {
+  from { opacity: 0.7; }
+  to   { opacity: 1;   }
+}
+
+.hf-eyebrow {
+  display: block;
+  position: relative;
+  z-index: 1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 20px;
+  animation: hfReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.hf-title {
+  position: relative;
+  z-index: 1;
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(3.5rem, 18vw, 6rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin: 0 0 24px;
+  animation: hfReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+
+  em {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.38);
+  }
+}
+
+.hf-sub {
+  position: relative;
+  z-index: 1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.32);
+  margin: 0;
+  animation: hfReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+@keyframes hfReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

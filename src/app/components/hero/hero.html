@@ -1,4 +1,13 @@
 <!-- hero.html — canvas is created in hero.ts to guarantee a fresh WebGL context -->
 <section class="hero-section">
-  <div #heroContainer class="hero-container"></div>
+  <!-- Desktop: Spline 3D canvas appended here by hero.ts -->
+  <div class="hero-container"></div>
+
+  <!-- Mobile fallback — shown when Spline is skipped (max-width: 860px) -->
+  <div class="hero-mobile-fallback">
+    <span class="hf-eyebrow">Full-Stack Engineer</span>
+    <h1 class="hf-title">Malik<br><em>Umair</em></h1>
+    <p class="hf-sub">Angular · .NET · SQL Server</p>
+    <div class="hf-glow"></div>
+  </div>
 </section>
