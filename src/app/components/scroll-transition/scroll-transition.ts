@@ -21,13 +21,11 @@ gsap.registerPlugin(ScrollTrigger);
 export class ScrollTransition implements AfterViewInit, OnDestroy {
 
   @ViewChild('sectionRef') sectionRef!: ElementRef<HTMLElement>;
-  @ViewChild('wrapperRef') wrapperRef!: ElementRef<HTMLElement>;
   @ViewChild('imgRef')     imgRef!:     ElementRef<HTMLImageElement>;
   @ViewChild('titleRef')   titleRef!:   ElementRef<HTMLElement>;
-  @ViewChild('markRef')    markRef!:    ElementRef<HTMLElement>;
-  @ViewChild('dotRef')     dotRef!:     ElementRef<HTMLElement>;
 
   private lenis!: Lenis;
+  private lenisRaf!: (time: number) => void;
   private triggers: ScrollTrigger[] = [];
 
   constructor(private ngZone: NgZone) {}
@@ -45,159 +43,58 @@ export class ScrollTransition implements AfterViewInit, OnDestroy {
       easing: (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -8 * t)),
       smoothWheel: true,
       wheelMultiplier: 0.5,
-      syncTouch: true,
+      syncTouch: false,
     });
     this.lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => this.lenis.raf(time * 1000));
+    this.lenisRaf = (time: number) => this.lenis.raf(time * 1000);
+    gsap.ticker.add(this.lenisRaf);
     gsap.ticker.lagSmoothing(0);
   }
 
   private initAnimations(): void {
     const section = this.sectionRef.nativeElement;
-    const wrapper = this.wrapperRef.nativeElement;
     const img     = this.imgRef.nativeElement;
     const textEl  = this.titleRef.nativeElement;
-    const dot     = this.dotRef.nativeElement;
-    const mark    = this.markRef.nativeElement;
 
-    // ── Initial states (no flicker) ───────────────────────────────────
-    gsap.set(img, {
-      filter: 'brightness(0.05) contrast(1.2)',
-      scale: 0.85,
-      force3D: true,
-    });
-    gsap.set(textEl, { opacity: 0, y: 60, force3D: true });
-    gsap.set(dot, {
-      width: '142vmax',
-      height: '142vmax',
-      xPercent: -50,
-      yPercent: -50,
-      top: '50%',
-      left: '50%',
-      scale: 0,
-      force3D: true,
-    });
+    // Start: pure black + slightly zoomed in
+    gsap.set(img,    { filter: 'brightness(0)', scale: 1.08, force3D: true });
+    gsap.set(textEl, { opacity: 0, y: 30, force3D: true });
 
-    // ── Pin wrapper while section scrolls ────────────────────────────
-    ScrollTrigger.create({
+    // Fires once when section enters viewport — plays a timed animation
+    // (section is 100vh so scrub has no range; once:true is the right pattern)
+    const st = ScrollTrigger.create({
       trigger: section,
-      start: 'top top',
-      end: 'bottom bottom',
-      pin: wrapper,
-      pinSpacing: false,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
+      start: 'top 70%',
+      once: true,
+      onEnter: () => {
+        const tl = gsap.timeline();
+
+        // Image: black → full color + scale settles (slow, cinematic)
+        tl.to(img, {
+          filter: 'brightness(1)',
+          scale: 1,
+          duration: 2.2,
+          ease: 'power2.out',
+          force3D: true,
+        }, 0);
+
+        // Text: fades + rises after image starts revealing
+        tl.to(textEl, {
+          opacity: 1,
+          y: 0,
+          duration: 1.4,
+          ease: 'power3.out',
+          force3D: true,
+        }, 0.7);
+      },
     });
 
-    const scrub = 2.5;
-
-    // Phase 1 — 0%→30%: Dark → Light
-    gsap.fromTo(img,
-      { filter: 'brightness(0.05) contrast(1.2)' },
-      {
-        filter: 'brightness(1) contrast(1)',
-        ease: 'none',
-        immediateRender: false,
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '30% bottom',
-          scrub,
-          invalidateOnRefresh: true,
-        },
-      }
-    );
-
-    // Phase 2 — 0%→50%: Scale up
-    gsap.fromTo(img,
-      { scale: 0.85 },
-      {
-        scale: 1.08,
-        ease: 'none',
-        immediateRender: false,
-        force3D: true,
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '50% bottom',
-          scrub: scrub + 0.5,
-          invalidateOnRefresh: true,
-        },
-      }
-    );
-
-    // Phase 3 — 20%→45%: Text fades in
-    gsap.fromTo(textEl,
-      { opacity: 0, y: 60, force3D: true },
-      {
-        opacity: 1,
-        y: 0,
-        ease: 'none',
-        immediateRender: false,
-        force3D: true,
-        scrollTrigger: {
-          trigger: section,
-          start: '20% top',
-          end: '45% bottom',
-          scrub,
-          invalidateOnRefresh: true,
-        },
-      }
-    );
-
-    // Phase 4 — 55%→80%: Light → Dark again
-    gsap.fromTo(img,
-      { filter: 'brightness(1) contrast(1)' },
-      {
-        filter: 'brightness(0.05) contrast(1.2)',
-        ease: 'none',
-        immediateRender: false,
-        scrollTrigger: {
-          trigger: section,
-          start: '55% top',
-          end: '80% bottom',
-          scrub,
-          invalidateOnRefresh: true,
-        },
-      }
-    );
-
-    // Phase 5 — 82%→100%: Dot expands from "?" → full screen
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: '82% top',
-        end: 'bottom top',
-        scrub: 1.5,
-        invalidateOnRefresh: true,
-      },
-      defaults: { ease: 'none' },
-    }).fromTo(dot,
-      {
-        scale: 0,
-        force3D: true,
-        x: () => {
-          const mb = mark.getBoundingClientRect();
-          return mb.left + mb.width * 0.50 - section.getBoundingClientRect().width / 2;
-        },
-        y: () => {
-          const mb = mark.getBoundingClientRect();
-          return mb.top + mb.height * 0.80 - section.getBoundingClientRect().height / 2;
-        },
-      },
-      {
-        scale: 1,
-        x: 0,
-        y: 0,
-        ease: 'power3.in',
-        force3D: true,
-      }
-    );
+    this.triggers.push(st);
   }
 
   ngOnDestroy(): void {
+    if (this.lenisRaf) gsap.ticker.remove(this.lenisRaf);
     this.lenis?.destroy();
-    gsap.ticker.remove(() => {});
-    ScrollTrigger.getAll().forEach(t => t.kill());
+    this.triggers.forEach(t => t?.kill());
   }
 }
